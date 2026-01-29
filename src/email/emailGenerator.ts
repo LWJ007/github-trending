@@ -14,44 +14,53 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GitHub Trending 每日推送 - ${date}</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #333; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #333; -webkit-text-size-adjust: 100%; }
     a { text-decoration: none; color: #0066cc; }
     @media only screen and (max-width: 600px) {
-      .stats-table, .grid-2 { width: 100% !important; }
-      .stat-col { display: block !important; width: 100% !important; }
+      .mobile-padding { padding: 15px !important; }
+      .mobile-header-padding { padding: 25px 15px !important; }
+      .stats-table .stat-col { display: block !important; width: 100% !important; margin-bottom: 10px !important; }
+      .stats-table tr { display: flex !important; flex-wrap: wrap !important; }
+      .mobile-stack { display: block !important; width: 100% !important; }
+      .mobile-center { text-align: center !important; }
+      .mobile-full { width: 100% !important; }
+      h1 { font-size: 22px !important; }
+      h2 { font-size: 18px !important; }
+      h3 { font-size: 16px !important; }
+      .stat-cell div { font-size: 24px !important; }
     }
   </style>
 </head>
-<body bgcolor="#f6f6f6" style="margin: 0; padding: 20px; background-color: #f6f6f6;">
-  <table cellpadding="0" cellspacing="0" width="600" style="margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+<body bgcolor="#f6f6f6" style="margin: 0; padding: 10px; background-color: #f6f6f6;">
+  <table cellpadding="0" cellspacing="0" style="margin: 0 auto; max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
     
     <!-- Header -->
     <tr>
-      <td style="background-color: #0066cc; padding: 40px 30px; text-align: center;">
+      <td style="background-color: #0066cc; padding: 40px 30px; text-align: center;" class="mobile-header-padding">
         <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: 600;">🚀 GitHub Trending 每日推送</h1>
         <p style="color: #ffffff; font-size: 18px; margin: 0 0 15px 0; opacity: 0.95;">${date}</p>
-        ${theme ? `<div style="background-color: rgba(255,255,255,0.15); color: #ffffff; padding: 10px 20px; display: inline-block; border-radius: 20px; font-size: 16px; font-weight: 500;">🎯 今日主题: ${theme}</div>` : ''}
+        ${theme ? `<div style="background-color: rgba(255,255,255,0.15); color: #ffffff; padding: 10px 20px; display: inline-block; border-radius: 20px; font-size: 16px; font-weight: 500; max-width: 90%;">🎯 今日主题: ${theme}</div>` : ''}
       </td>
     </tr>
 
     <!-- Stats -->
     <tr>
-      <td style="padding: 30px; border-bottom: 1px solid #e5e5e5;">
+      <td style="padding: 30px; border-bottom: 1px solid #e5e5e5;" class="mobile-padding">
         <table cellpadding="0" cellspacing="0" width="100%" class="stats-table">
           <tr>
-            <td class="stat-col" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f8f9ff; border-radius: 8px;">
+            <td class="stat-col stat-cell" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f8f9ff; border-radius: 8px;">
               <div style="font-size: 32px; font-weight: 600; color: #0066cc; margin-bottom: 5px;">${projects.length}</div>
               <div style="font-size: 13px; color: #666; font-weight: 500;">📦 项目总数</div>
             </td>
-            <td class="stat-col" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #fff8f0; border-radius: 8px;">
+            <td class="stat-col stat-cell" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #fff8f0; border-radius: 8px;">
               <div style="font-size: 32px; font-weight: 600; color: #ff6600; margin-bottom: 5px;">${avgScore.toFixed(1)}</div>
               <div style="font-size: 13px; color: #666; font-weight: 500;">⭐ 平均分</div>
             </td>
-            <td class="stat-col" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f0fff0; border-radius: 8px;">
+            <td class="stat-col stat-cell" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f0fff0; border-radius: 8px;">
               <div style="font-size: 32px; font-weight: 600; color: #00aa44; margin-bottom: 5px;">${newProjectCount || 0}</div>
               <div style="font-size: 13px; color: #666; font-weight: 500;">🆕 新项目</div>
             </td>
-            <td class="stat-col" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f0f8ff; border-radius: 8px;">
+            <td class="stat-col stat-cell" style="width: 25%; text-align: center; padding: 15px 10px; background-color: #f0f8ff; border-radius: 8px;">
               <div style="font-size: 32px; font-weight: 600; color: #0088cc; margin-bottom: 5px;">${techTrends?.length || 0}</div>
               <div style="font-size: 13px; color: #666; font-weight: 500;">🔥 技术趋势</div>
             </td>
@@ -64,12 +73,12 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
     ${techTrends && techTrends.length > 0
       ? `
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;" class="mobile-padding">
         <h2 style="font-size: 20px; margin: 0 0 15px 0; font-weight: 600; color: #333;">🔥 今日技术热词</h2>
-        <table cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
             ${techTrends.map((trend, index) => `
-              <td style="background-color: ${getSolidColor(index)}; color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; margin-right: 10px; margin-bottom: 10px; display: inline-block;">
+              <td style="background-color: ${getSolidColor(index)}; color: #ffffff; padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-block; margin-right: 6px; margin-bottom: 8px;">
                 ${trend}
               </td>
             `).join('')}
@@ -84,7 +93,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
     ${topProject
       ? `
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #fff8f0;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #fff8f0;" class="mobile-padding">
         <h2 style="font-size: 22px; margin: 0 0 20px 0; font-weight: 600; color: #333; text-align: center;">👑 今日王者项目</h2>
         ${generateProjectCard(topProject, 0, true)}
       </td>
@@ -96,12 +105,12 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
     ${recommendedProjects.length > 0
       ? `
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;" class="mobile-padding">
         <h2 style="font-size: 22px; margin: 0 0 20px 0; font-weight: 600; color: #333;">⭐ 精选推荐</h2>
-        <table cellpadding="0" cellspacing="0" width="100%" class="grid-2">
+        <table cellpadding="0" cellspacing="0" width="100%">
           ${recommendedProjects.map((project, index) => `
             <tr>
-              <td style="padding: 10px 5px;">
+              <td style="padding: 10px 0;">
                 ${generateProjectCard(project, index + (topProject ? 1 : 1), false)}
               </td>
             </tr>
@@ -114,7 +123,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 
     <!-- Summary -->
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #f8f9ff;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #f8f9ff;" class="mobile-padding">
         <h2 style="font-size: 18px; margin: 0 0 12px 0; font-weight: 600; color: #333;">✨ 今日重点推荐</h2>
         <p style="color: #555; margin: 0; font-size: 15px;">${summary}</p>
       </td>
@@ -122,7 +131,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 
     <!-- All Projects List -->
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5;" class="mobile-padding">
         <h2 style="font-size: 22px; margin: 0 0 20px 0; font-weight: 600; color: #333;">📋 所有项目</h2>
         <table cellpadding="0" cellspacing="0" width="100%">
           ${projects.map((project, index) => `
@@ -138,12 +147,12 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 
     <!-- Language Distribution -->
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #fafafa;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #fafafa;" class="mobile-padding">
         <h2 style="font-size: 18px; margin: 0 0 15px 0; font-weight: 600; color: #333;">📊 语言分布</h2>
-        <table cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
             ${Object.entries(languageStats).map(([lang, count]) => `
-              <td style="background-color: #e8f0fe; color: #1a73e8; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; margin-right: 8px; margin-bottom: 8px; display: inline-block;">
+              <td style="background-color: #e8f0fe; color: #1a73e8; padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-block; margin-right: 6px; margin-bottom: 8px;">
                 ${getLanguageEmoji(lang)} ${lang}: ${count}
               </td>
             `).join('')}
@@ -154,7 +163,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 
     <!-- Tips -->
     <tr>
-      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #f0f8ff;">
+      <td style="padding: 25px 30px; border-bottom: 1px solid #e5e5e5; background-color: #f0f8ff;" class="mobile-padding">
         <h2 style="font-size: 18px; margin: 0 0 12px 0; font-weight: 600; color: #333;">💡 每日小贴士</h2>
         <p style="color: #555; margin: 0; font-size: 14px;">${generateTips(analysis)}</p>
       </td>
@@ -162,7 +171,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 
     <!-- Footer -->
     <tr>
-      <td style="background-color: #333; padding: 30px; text-align: center;">
+      <td style="background-color: #333; padding: 30px; text-align: center;" class="mobile-header-padding">
         <p style="color: #aaa; margin: 0 0 8px 0; font-size: 13px;">由 AI 自动分析生成，仅供参考</p>
         <p style="color: #888; margin: 0; font-size: 11px;">© 2026 GitHub Trending Daily</p>
       </td>
@@ -191,16 +200,16 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
         <td style="padding: 20px; border-left: ${borderLeft}; border: 1px solid #e5e5e5; border-left-width: ${isKing || highlightLevel === 'recommended' ? '4px' : '1px'};">
           <table cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="60%">
-                <table cellpadding="0" cellspacing="0">
+              <td width="60%" class="mobile-stack">
+                <table cellpadding="0" cellspacing="0" width="100%">
                   <tr>
-                    <td style="background-color: #f0f0f0; color: #666; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 8px;">${index + 1}</td>
-                    ${highlightLevel !== 'watch' ? `<td style="padding: 4px 8px; margin-left: 8px;">${getBadge(highlightLevel)}</td>` : ''}
-                    ${isNew ? `<td style="background-color: #28a745; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-left: 8px;">🆕 新</td>` : ''}
+                    <td style="background-color: #f0f0f0; color: #666; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 8px; display: inline-block;">${index + 1}</td>
+                    ${highlightLevel !== 'watch' ? `<td style="padding: 4px 8px; margin-left: 8px; display: inline-block;">${getBadge(highlightLevel)}</td>` : ''}
+                    ${isNew ? `<td style="background-color: #28a745; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-left: 8px; display: inline-block;">🆕 新</td>` : ''}
                   </tr>
                 </table>
               </td>
-              <td align="right" width="40%">
+              <td align="right" width="40%" class="mobile-center" style="width: 40%; text-align: right;">
                 <div style="background-color: ${scoreBgColor}; color: ${scoreTextColor}; padding: 8px 16px; border-radius: 20px; display: inline-block; font-size: 18px; font-weight: 600;">${project.recommendationScore}/10</div>
               </td>
             </tr>
@@ -216,14 +225,14 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
             </tr>
           </table>
           <p style="color: #666; font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">${project.summary}</p>
-          <table cellpadding="0" cellspacing="0">
+          <table cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td>
-                ${project.category ? `<span style="background-color: #f0f0f0; color: #666; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500;">${project.category}</span>` : ''}
+              <td class="mobile-stack">
+                ${project.category ? `<span style="background-color: #f0f0f0; color: #666; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; display: inline-block;">${project.category}</span>` : ''}
                 ${popularityText ? `<span style="margin-left: 8px; font-size: 12px; color: #999;">${popularityText}</span>` : ''}
               </td>
-              <td align="right">
-                <a href="${projectUrl}" target="_blank" style="color: #0066cc; font-size: 14px; font-weight: 500; text-decoration: none;">查看详情 →</a>
+              <td align="right" class="mobile-center mobile-full">
+                <a href="${projectUrl}" target="_blank" style="color: #0066cc; font-size: 14px; font-weight: 500; text-decoration: none; display: inline-block;">查看详情 →</a>
               </td>
             </tr>
           </table>
@@ -236,11 +245,11 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
   return `
   <table cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 3px solid #ff6600;">
     <tr>
-      <td style="padding: 25px;">
+      <td style="padding: 25px;" class="mobile-padding">
         <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
-            <td width="85%">
-              <table cellpadding="0" cellspacing="0">
+            <td width="85%" class="mobile-stack">
+              <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td style="font-size: 30px;">👑</td>
                   <td>
@@ -253,7 +262,7 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
               <p style="color: #555; font-size: 15px; margin: 0 0 10px 0; line-height: 1.5;">${project.summary}</p>
               ${starsChangeText ? `<p style="color: #999; font-size: 13px; margin: 0 0 15px 0;">${starsChangeText} 今日新增</p>` : ''}
             </td>
-            <td width="15%" align="right" valign="top">
+            <td width="15%" align="right" valign="top" class="mobile-center" style="width: 15%; text-align: right; vertical-align: top;">
               <div style="background-color: #ff6600; color: #ffffff; padding: 12px 20px; border-radius: 12px; display: inline-block; font-size: 28px; font-weight: 600;">${project.recommendationScore}<span style="font-size: 14px; font-weight: normal; margin-left: 2px;">/10</span></div>
               <p style="color: #999; font-size: 11px; margin: 8px 0 0 0;">${popularityText}</p>
             </td>
@@ -262,10 +271,10 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
 
         ${project.category
           ? `
-        <table cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
-            <td>
-              <span style="background-color: #f0f0f0; color: #666; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500;">📁 ${project.category}</span>
+            <td class="mobile-center">
+              <span style="background-color: #f0f0f0; color: #666; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; display: inline-block;">📁 ${project.category}</span>
             </td>
           </tr>
         </table>
@@ -278,10 +287,10 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
           <tr>
             <td>
               <p style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 8px 0;">主要技术栈</p>
-              <table cellpadding="0" cellspacing="0">
+              <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   ${project.techStack.map((tech: string) => `
-                    <td style="background-color: #e3f2fd; color: #1976d2; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-right: 8px; display: inline-block;">
+                    <td style="background-color: #e3f2fd; color: #1976d2; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; display: inline-block; margin-right: 8px; margin-bottom: 8px;">
                       ${tech}
                     </td>
                   `).join('')}
@@ -299,7 +308,7 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
           <tr>
             <td>
               <p style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 8px 0;">核心功能</p>
-              <table cellpadding="0" cellspacing="0">
+              <table cellpadding="0" cellspacing="0" width="100%">
                 ${project.features.map((feature: string) => `
                   <tr>
                     <td style="padding: 4px 0; color: #555; font-size: 14px;">• ${feature}</td>
@@ -314,7 +323,7 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
 
         <table cellpadding="0" cellspacing="0" width="100%" style="margin: 15px 0;">
           <tr>
-            <td style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 3px solid #0066cc;">
+            <td style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 3px solid #0066cc;" class="mobile-padding">
               <p style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 6px 0;">❓ 为什么 Trending</p>
               <p style="color: #555; margin: 0; font-size: 14px; line-height: 1.5;">${project.trendingReason}</p>
             </td>
@@ -323,16 +332,16 @@ function generateProjectCard(project: ProjectAnalysis, index: number, isKing: bo
 
         <table cellpadding="0" cellspacing="0" width="100%" style="margin: 15px 0;">
           <tr>
-            <td style="background-color: #f3e5f5; padding: 15px; border-radius: 6px; border-left: 3px solid #6f42c1;">
+            <td style="background-color: #f3e5f5; padding: 15px; border-radius: 6px; border-left: 3px solid #6f42c1;" class="mobile-padding">
               <p style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 6px 0;">💡 推荐理由</p>
               <p style="color: #555; margin: 0; font-size: 14px; line-height: 1.5;">${project.recommendationReason}</p>
             </td>
           </tr>
         </table>
 
-        <table cellpadding="0" cellspacing="0" width="100%">
+        <table cellpadding="0" cellspacing="0" width="100%" style="margin: 15px 0;">
           <tr>
-            <td align="center">
+            <td align="center" class="mobile-center">
               <a href="${projectUrl}" target="_blank" style="background-color: #0066cc; color: #ffffff; padding: 12px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;">📦 查看项目</a>
             </td>
           </tr>
