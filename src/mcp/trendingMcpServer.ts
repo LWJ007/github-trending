@@ -37,8 +37,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             limit: {
               type: 'number',
-              description: '返回数量，默认 10',
-              default: 10,
+              description: '返回数量，默认 13',
+              default: 13,
             },
             language: {
               type: 'string',
@@ -60,7 +60,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === 'get_trending_repositories') {
     const args = (request.params.arguments ?? {}) as TrendingToolArgs
-    const limit = typeof args.limit === 'number' ? args.limit : 10
+    const limit = typeof args.limit === 'number' ? args.limit : 13
     const filterLanguage = args.language
     const timeframe = (args.timeframe === 'weekly' || args.timeframe === 'monthly') ? args.timeframe : 'daily'
 
