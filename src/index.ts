@@ -167,7 +167,21 @@ async function processLanguage(language: string | undefined): Promise<void> {
     logger.info(`${languageLabel} 任务完成！`)
   }
   catch (error) {
-    logger.error(`${languageLabel} 任务执行失败:`, error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    logger.error(`${languageLabel} 任务执行失败:`, errorMessage)
+
+    // 提供更详细的错误提示
+    if (errorMessage.includes('API 调用失败')) {
+      logger.error('========================================')
+      logger.error('❌ 配置错误')
+      logger.error('========================================')
+      logger.error('请检查 .env 文件中的 ANTHROPIC_API_KEY 配置')
+      logger.error('1. 确保已设置有效的 Claude API Key')
+      logger.error('2.格式应为: ANTHROPIC_API_KEY=sk-ant-api03-xxxxx')
+      logger.error('3. 请访问 https://console.anthropic.com/ 获取 API Key')
+      logger.error('========================================')
+    }
+
     throw error
   }
 }
