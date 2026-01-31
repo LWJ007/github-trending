@@ -27,8 +27,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # 📌 自定义模型配置（可选）
           # 如果使用非 Anthropic 官方模型，可以配置以下变量：
-          # ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
-          # ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
 
           # ===========================================
           # 邮件服务配置
