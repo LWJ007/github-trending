@@ -27,11 +27,30 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # 📌 自定义模型配置（可选）
           # 如果使用非 Anthropic 官方模型，可以配置以下变量：
-          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
-          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          # ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          # ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          
+          # ===========================================
+          # 邮件服务配置
+          # ===========================================
+          
+          # 方式1：使用 Resend API（推荐）
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
           RESEND_TO_EMAIL: ${{ secrets.RESEND_TO_EMAIL }}
+          
+          # 方式2：使用 SMTP（如 163、QQ 邮箱）
+          USE_SMTP: ${{ secrets.USE_SMTP }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          
+          # 注意：
+          # - SMTP_USER 和 SMTP_PASSWORD 应该在 GitHub Secrets 中配置，而不是 .env 文件
+          # - 163 邮箱需要在邮箱设置中开启 SMTP 服务并生成授权码
+          
           EMAIL_SEND_ENABLED: true
           NODE_ENV: production
           LOG_LEVEL: info

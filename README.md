@@ -59,25 +59,6 @@ SMTP_USER=your-email@163.com
 SMTP_PASSWORD=your-smtp-password
 ```
 
-**SMTP 配置说明：**
-- `SMTP_PASSWORD` 是邮箱的 SMTP 授权码，不是邮箱登录密码
-- 163 邮箱需要在设置中开启 SMTP 服务并生成授权码
-- `SMTP_SECURE=true` 表示使用 SSL/TLS
-
-```env
-# GitHub Trending 语言配置
-TRENDING_LANGUAGES=typescript,python,go,rust,javascript
-
-# 邮件发送控制
-EMAIL_SEND_ENABLED=true
-NODE_ENV=development
-
-# 日志配置
-LOG_LEVEL=info
-LOG_LLM_OUTPUT=false
-LOG_LLM_STREAM=false
-```
-
 ### 3. 本地运行
 
 ```bash
@@ -102,10 +83,29 @@ ANTHROPIC_API_KEY=sk-ant-xxx
 ANTHROPIC_BASE_URL=https://api.openai.com/v1
 ANTHROPIC_MODEL=gpt-4o
 
-# Resend 邮件服务（必填）
-RESEND_API_KEY=re_xxx
-RESEND_FROM_EMAIL=noreply@yourdomain.com
-RESEND_TO_EMAIL=recipient@example.com
+#### 邮件服务配置（二选一）
+
+**方式 1：使用 Resend API（推荐）**
+
+在 GitHub Secrets 中配置：
+- `RESEND_API_KEY`：Resend API 密钥（[获取](https://resend.com/api-keys)）
+- `RESEND_FROM_EMAIL`：发件人邮箱（需在 Resend 中验证过域名）
+- `RESEND_TO_EMAIL`：收件人邮箱
+
+**方式 2：使用 SMTP（如 163、QQ 邮箱）**
+
+在 GitHub Secrets 中配置：
+- `USE_SMTP`：设置为 `true` 启用 SMTP
+- `SMTP_HOST`：SMTP 服务器（如 `smtp.163.com`）
+- `SMTP_PORT`：SMTP 端口（如 `465`）
+- `SMTP_SECURE`：是否使用 SSL/TLS（`true`）
+- `SMTP_USER`：SMTP 用户名（邮箱地址）
+- `SMTP_PASSWORD`：SMTP 授权码（⚠️ 不是邮箱登录密码）
+
+**重要提示：**
+- ⚠️ **不要在 `.env` 文件中直接写入 `SMTP_USER` 和 `SMTP_PASSWORD`**
+- ⚠️ 这些敏感信息应该从 GitHub Secrets 读取
+- 163 邮箱授权码获取：邮箱设置 → POP3/SMTP/IMAP → 开启 SMTP 服务 → 生成授权码
 
 # GitHub Trending 语言配置（可选）
 # 配置要抓取的语言列表，用逗号分隔
