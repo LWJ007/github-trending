@@ -1,13 +1,13 @@
 # GitHub Trending 每日推送
 
-一个自动化脚本，在 GitHub Actions 上定时运行，通过自定义 MCP Server 获取 GitHub Trending 页面的热门项目列表，然后让 Claude AI 通过 Web Search 工具自主地获取每个项目的详细信息、进行分析，并生成邮件通过 Resend 发送到指定邮箱。
+一个自动化脚本，在 GitHub Actions 上定时运行，通过自定义 MCP Server 获取 GitHub Trending 页面的热门项目列表，然后让 Claude AI 通过 Web Search 工具自主地获取每个项目的详细信息、进行分析，并生成邮件通过 Resend/SMTP 发送到指定邮箱。
 
 ## ✨ 特性
 
 - 🚀 **自动化执行**：通过 GitHub Actions 定时每天 09:00 UTC 自动运行
 - 🤖 **Claude AI 分析**：使用 Claude AI 进行深度的智能分析
 - 🌐 **Web Search**：Claude 自主使用 Web Search 获取项目详细信息
-- 📧 **邮件推送**：通过 Resend 发送精美的 HTML 邮件
+- 📧 **邮件推送**：支持 Resend API 或 SMTP（163、QQ 等传统邮箱）
 - 🌍 **多语言支持**：支持按语言分类抓取，每语言单独发送邮件
 - 🎨 **响应式设计**：邮件模板基于 Tailwind CSS，支持移动端
 - 🔧 **自定义模型**：支持使用非 Anthropic 官方的模型（OpenAI、DeepSeek 等）
@@ -17,7 +17,7 @@
 
 - Node.js 18+
 - Claude API Key（或兼容的 OpenAI API Key）
-- Resend API Key
+- Resend API Key **或 SMTP 邮箱配置**
 
 ## 🚀 快速开始
 
@@ -25,6 +25,69 @@
 
 ```bash
 npm install
+```
+
+### 2. 配置环境变量
+
+复制 `.env.example` 为 `.env` 并配置以下变量：
+
+```env
+# Claude API（必填）
+ANTHROPIC_API_KEY=sk-ant-xxx
+
+# 自定义模型配置（可选）
+ANTHROPIC_BASE_URL=https://api.openai.com/v1
+ANTHROPIC_MODEL=gpt-4o
+```
+
+#### 邮件服务配置（二选一）
+
+**方式 1：使用 Resend API（推荐）**
+```env
+RESEND_API_KEY=re_xxx
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+RESEND_TO_EMAIL=recipient@example.com
+```
+
+**方式 2：使用 SMTP（如 163、QQ 邮箱）**
+```env
+USE_SMTP=true
+SMTP_HOST=smtp.163.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=your-email@163.com
+SMTP_PASSWORD=your-smtp-password
+```
+
+**SMTP 配置说明：**
+- `SMTP_PASSWORD` 是邮箱的 SMTP 授权码，不是邮箱登录密码
+- 163 邮箱需要在设置中开启 SMTP 服务并生成授权码
+- `SMTP_SECURE=true` 表示使用 SSL/TLS
+
+```env
+# GitHub Trending 语言配置
+TRENDING_LANGUAGES=typescript,python,go,rust,javascript
+
+# 邮件发送控制
+EMAIL_SEND_ENABLED=true
+NODE_ENV=development
+
+# 日志配置
+LOG_LEVEL=info
+LOG_LLM_OUTPUT=false
+LOG_LLM_STREAM=false
+```
+
+### 3. 本地运行
+
+```bash
+npm start
+```
+
+或使用热重载模式：
+
+```bash
+npm run dev
 ```
 
 ### 2. 配置环境变量
