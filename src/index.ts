@@ -87,8 +87,9 @@ function logClaudeOutput(message: ClaudeMessage): void {
   }
 }
 
-async function main(): Promise<void> {
-  logger.info('开始执行 GitHub Trending 分析任务')
+async function processLanguage(language: string | undefined): Promise<void> {
+  const languageLabel = language ? `[${language}]` : '[All Languages]'
+  logger.info(`开始处理语言: ${languageLabel}`)
 
   try {
     if (!process.env.ANTHROPIC_API_KEY) {
@@ -101,7 +102,7 @@ async function main(): Promise<void> {
     if (maxRepos) {
       logger.warn(`降级模式：已设置 MAX_TRENDING_REPOS=${maxRepos}，最多分析前 ${maxRepos} 个项目`)
     }
-    const agentPrompt = getAgentPrompt(maxRepos)
+    const agentPrompt = getAgentPrompt(maxRepos, language)
 
     logger.info('开始执行 Claude Agent 分析任务...')
     logger.debug(`使用模型: ${model}`)
@@ -155,14 +156,42 @@ async function main(): Promise<void> {
     logger.debug(`分析日期: ${analysis.date}`)
 
     logger.info('生成邮件模板...')
-    const emailHtml = generateEmail(analysis)
+    const emailHtml = generateEmail(analysis, language)
     logger.debug(`邮件模板已生成 (长度: ${emailHtml.length} 字符)`)
 
     logger.info('发送邮件...')
-    await sendEmail(emailHtml)
+    await sendEmail(emailHtml, language)
     logger.info('邮件已发送成功')
 
-    logger.info('任务完成！')
+    logger.info(`${languageLabel} 任务完成！`)
+  }
+  catch (error) {
+    logger.error(`${languageLabel} 任务执行失败:`, error)
+    throw error
+  }
+}
+
+async function main(): Promise<void> {
+  logger.info('开始执行 GitHub Trending 分析任务')
+
+  try {
+    const languagesEnv = process.env.TRENDING_LANGUAGES || ''
+    const configuredLanguages = languagesEnv
+      ? languagesEnv.split(',').map(lang => lang.trim()).filter(lang => lang)
+      : []
+
+    const languages = configuredLanguages.length > 0
+      ? [undefined, ...configuredLanguages]
+      : [undefined]
+
+    logger.info(`配置的语言列表: ${configuredLanguages.length > 0 ? configuredLanguages.join(', ') : '无（仅抓取所有语言）'}`)
+    logger.info(`实际抓取列表: ${languages.map(l => l || '所有语言').join(', ')}`)
+
+    for (const language of languages) {
+      await processLanguage(language)
+    }
+
+    logger.info('所有任务完成！')
   }
   catch (error) {
     logger.error('任务执行失败:', error)

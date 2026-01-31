@@ -8,6 +8,7 @@
 - 🤖 **Claude AI 分析**：使用 Claude AI 进行深度的智能分析
 - 🌐 **Web Search**：Claude 自主使用 Web Search 获取项目详细信息
 - 📧 **邮件推送**：通过 Resend 发送精美的 HTML 邮件
+- 🌍 **多语言支持**：支持按语言分类抓取，每语言单独发送邮件
 - 🎨 **响应式设计**：邮件模板基于 Tailwind CSS，支持移动端
 - 🔧 **自定义模型**：支持使用非 Anthropic 官方的模型（OpenAI、DeepSeek 等）
 - 📊 **多维度分析**：包括项目简介、技术栈、核心功能、trending 原因和推荐指数
@@ -43,6 +44,17 @@ RESEND_API_KEY=re_xxx
 RESEND_FROM_EMAIL=noreply@yourdomain.com
 RESEND_TO_EMAIL=recipient@example.com
 
+# GitHub Trending 语言配置（可选）
+# 配置要抓取的语言列表，用逗号分隔
+# 示例：typescript,python,go,rust,javascript
+#
+# 行为说明：
+# - 留空：只抓取一次所有语言（https://github.com/trending），发送 1 封邮件
+# - 配置语言：先抓取一次所有语言，然后再抓取每个配置的语言
+#   例如：TRENDING_LANGUAGES=typescript,python
+#   会发送 3 封邮件：[所有语言], [TypeScript], [Python]
+TRENDING_LANGUAGES=typescript,python,go
+
 # 邮件发送控制（可选）
 EMAIL_SEND_ENABLED=true  # 设为 false 则不发送邮件，改为输出内容
 NODE_ENV=development     # 开发模式下自动不发送邮件
@@ -77,6 +89,10 @@ bun dev
    - `RESEND_API_KEY`：Resend API 密钥（必填）
    - `RESEND_FROM_EMAIL`：发件人邮箱（必填）
    - `RESEND_TO_EMAIL`：收件人邮箱（必填）
+   - `TRENDING_LANGUAGES`：要抓取的语言列表，用逗号分隔（可选）
+     - 留空：只抓取一次所有语言，发送 1 封邮件
+     - 配置：先抓取所有语言，再抓取每个配置的语言
+     - 示例：`typescript,python,go` 会发送 4 封邮件（所有语言 + 3 个语言）
    - `EMAIL_SEND_ENABLED`：是否发送邮件（可选，默认 true）
    - `NODE_ENV`：开发模式下自动不发送邮件（可选，设置为 development）
 

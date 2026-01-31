@@ -1,7 +1,8 @@
 import type { ProjectAnalysis, TrendingAnalysisResult } from '../../types/index.js'
 
-export function generateEmail(analysis: TrendingAnalysisResult): string {
+export function generateEmail(analysis: TrendingAnalysisResult, language?: string): string {
   const { date, projects, summary, theme, topProject, techTrends, newProjectCount } = analysis
+  const languageLabel = language ? `[${language}]` : ''
 
   const languageStats = calculateLanguageStats(projects)
   const avgScore = calculateAverageScore(projects)
@@ -12,7 +13,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Trending 每日推送 - ${date}</title>
+  <title>GitHub Trending 每日推送${languageLabel} - ${date}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #333; -webkit-text-size-adjust: 100%; }
     a { text-decoration: none; color: #0066cc; }
@@ -37,7 +38,7 @@ export function generateEmail(analysis: TrendingAnalysisResult): string {
     <!-- Header -->
     <tr>
       <td style="background-color: #0066cc; padding: 40px 30px; text-align: center;" class="mobile-header-padding">
-        <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: 600;">🚀 GitHub Trending 每日推送</h1>
+        <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: 600;">🚀 GitHub Trending 每日推送${languageLabel}</h1>
         <p style="color: #ffffff; font-size: 18px; margin: 0 0 15px 0; opacity: 0.95;">${date}</p>
         ${theme ? `<div style="background-color: rgba(255,255,255,0.15); color: #ffffff; padding: 10px 20px; display: inline-block; border-radius: 20px; font-size: 16px; font-weight: 500; max-width: 90%;">🎯 今日主题: ${theme}</div>` : ''}
       </td>

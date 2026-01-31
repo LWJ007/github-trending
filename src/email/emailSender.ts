@@ -15,6 +15,7 @@ function sleep(ms: number): Promise<void> {
 
 async function sendEmailWithRetry(
   html: string,
+  language: string | undefined,
   retryCount: number = 0,
 ): Promise<void> {
   const fromEmail = process.env.RESEND_FROM_EMAIL
@@ -25,11 +26,14 @@ async function sendEmailWithRetry(
     throw new Error('Missing required email environment variables: RESEND_FROM_EMAIL or RESEND_TO_EMAIL')
   }
 
+  const languageLabel = language ? ` [${language}]` : ''
+  const subject = `GitHub Trending 每日推送${languageLabel} - ${date}`
+
   try {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: [toEmail],
-      subject: `GitHub Trending 每日推送 - ${date}`,
+      subject,
       html,
     })
 
@@ -46,7 +50,7 @@ async function sendEmailWithRetry(
         error: errorMessage,
       })
       await sleep(RETRY_DELAY)
-      await sendEmailWithRetry(html, retryCount + 1)
+      await sendEmailWithRetry(html, language, retryCount + 1)
     }
     else {
       logger.error('邮件发送失败，已达到最大重试次数', { error })
@@ -55,14 +59,14 @@ async function sendEmailWithRetry(
   }
 }
 
-export async function sendEmail(html: string): Promise<void> {
+export async function sendEmail(html: string, language?: string): Promise<void> {
   try {
     if (isDevelopment || !emailSendEnabled) {
       logger.info('开发模式或已关闭邮件发送，改为输出邮件内容到控制台')
       return
     }
 
-    await sendEmailWithRetry(html)
+    await sendEmailWithRetry(html, language)
   }
   catch (error: unknown) {
     logger.error('发送邮件时出错', error)
