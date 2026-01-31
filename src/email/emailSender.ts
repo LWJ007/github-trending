@@ -2,7 +2,7 @@ import process from 'node:process'
 import nodemailer from 'nodemailer'
 import { logger } from '../utils/logger.js'
 
-// SMTP 配置（从 GitHub Secrets 读取）
+// SMTP 配置（从环境变量读取）
 const smtpConfig = {
   host: process.env.SMTP_HOST || 'smtp.163.com',
   port: Number.parseInt(process.env.SMTP_PORT || '465'),
@@ -13,27 +13,11 @@ const smtpConfig = {
   }
 }
 
-// Resend 配置（从环境变量读取）
+// Resend 配置（从 GitHub Secrets 读取）
 const resendConfig = {
   apiKey: process.env.RESEND_API_KEY || ''
 }
-
-  // 创建 SMTP transporter
-  const smtpTransporter = nodemailer.createTransport(smtpConfig)
-
-  // 创建 Resend transporter（备用，从环境变量读取）
-  const resendConfig = {
-    apiKey: process.env.RESEND_API_KEY || ''
-  }
-  const resendTransporter = !useSmtp ? nodemailer.createTransport({
-    host: 'smtp.resend.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'resend',
-      pass: resendConfig.apiKey
-    }
-  }) : null
+}
 
   // 选择 transporter
   const transporter = smtpTransporter
