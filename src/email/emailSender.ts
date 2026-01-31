@@ -2,13 +2,7 @@ import process from 'node:process'
 import nodemailer from 'nodemailer'
 import { logger } from '../utils/logger.js'
 
-const MAX_RETRIES = 3
-const RETRY_DELAY = 1000
-const emailSendEnabled = !['false', '0', 'no'].includes((process.env.EMAIL_SEND_ENABLED || '').toLowerCase())
-const isDevelopment = process.env.NODE_ENV === 'development'
-const useSmtp = process.env.USE_SMTP === 'true' || false
-
-// SMTP 配置
+// SMTP 配置（从 GitHub Secrets 读取）
 const smtpConfig = {
   host: process.env.SMTP_HOST || 'smtp.163.com',
   port: Number.parseInt(process.env.SMTP_PORT || '465'),
@@ -19,49 +13,30 @@ const smtpConfig = {
   }
 }
 
-// Resend 配置（保留作为备用）
+// Resend 配置（从环境变量读取）
 const resendConfig = {
   apiKey: process.env.RESEND_API_KEY || ''
 }
 
-// 创建 SMTP transporter
-const smtpTransporter = useSmtp ? nodemailer.createTransport(smtpConfig) : null
+  // 创建 SMTP transporter
+  const smtpTransporter = nodemailer.createTransport(smtpConfig)
 
-// 创建 Resend transporter（备用）
-const resendTransporter = !useSmtp ? nodemailer.createTransport({
-  host: 'smtp.resend.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'resend',
-    pass: resendConfig.apiKey
+  // 创建 Resend transporter（备用，从环境变量读取）
+  const resendConfig = {
+    apiKey: process.env.RESEND_API_KEY || ''
   }
-}) : null
-
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-async function sendEmailWithRetry(
-  html: string,
-  language: string | undefined,
-  retryCount: number = 0,
-): Promise<void> {
-  const fromEmail = useSmtp
-    ? process.env.SMTP_USER
-    : process.env.RESEND_FROM_EMAIL
-  const toEmail = process.env.RESEND_TO_EMAIL
-  const date = new Date().toISOString().split('T')[0]
-
-  if (!fromEmail || !toEmail) {
-    throw new Error('Missing required email environment variables: SMTP_USER/SMTP_PASSWORD (for SMTP) or RESEND_FROM_EMAIL (for Resend)')
-  }
-
-  const languageLabel = language ? ` [${language}]` : ''
-  const subject = `GitHub Trending 每日推送${languageLabel} - ${date}`
+  const resendTransporter = !useSmtp ? nodemailer.createTransport({
+    host: 'smtp.resend.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'resend',
+      pass: resendConfig.apiKey
+    }
+  }) : null
 
   // 选择 transporter
-  const transporter = useSmtp ? smtpTransporter : resendTransporter
+  const transporter = smtpTransporter
 
   if (!transporter) {
     throw new Error('No valid email transporter configured')
