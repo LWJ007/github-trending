@@ -14,11 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install dependencies
-        run: bun install
+        run: npm install
 
       - name: Run trending script
         env:
@@ -35,7 +37,7 @@ jobs:
           LOG_LEVEL: info
           LOG_LLM_OUTPUT: false
           LOG_LLM_STREAM: false
-        run: bun run src/index.ts
+        run: npm start
 
       - name: Display execution log
         if: always()

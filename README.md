@@ -15,7 +15,7 @@
 
 ## 📋 环境要求
 
-- Node.js 18+ (或 Bun 1.3.7+)
+- Node.js 18+
 - Claude API Key（或兼容的 OpenAI API Key）
 - Resend API Key
 
@@ -24,7 +24,7 @@
 ### 1. 安装依赖
 
 ```bash
-bun install
+npm install
 ```
 
 ### 2. 配置环境变量
@@ -70,13 +70,13 @@ LOG_LLM_STREAM=false
 ### 3. 本地运行
 
 ```bash
-bun start
+npm start
 ```
 
 或使用热重载模式：
 
 ```bash
-bun dev
+npm run dev
 ```
 
 ### 4. 部署到 GitHub Actions
@@ -124,7 +124,7 @@ github-trending-daily/
 
 ## 🔧 技术栈
 
-- **运行时**：Bun
+- **运行时**：Node.js
 - **语言**：TypeScript
 - **Claude SDK**：@anthropic-ai/claude-agent-sdk
 - **HTML 解析**：cheerio

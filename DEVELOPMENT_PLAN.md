@@ -36,7 +36,7 @@
 
 ## 技术栈
 
- - **运行时**: Bun
+ - **运行时**: Node.js
  - **语言**: TypeScript
  - **Claude SDK**: 两种选择
    - 选项A: `@anthropic-ai/claude-agent-sdk`（推荐）- Agent SDK，内置 Tool Use 执行、MCP 支持，更简洁
@@ -151,8 +151,8 @@ async function executeTask(agentPrompt: string): Promise<any[]> {
       allowedTools: ['WebSearch'],
       mcpServers: {
         trending: {
-          command: 'bun',
-          args: ['run', './src/mcp/trendingServer.ts']
+          command: 'node',
+          args: ['./src/mcp/trendingServer.js']
         }
       }
     }
@@ -596,11 +596,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install dependencies
-        run: bun install
+        run: npm install
 
       - name: Run trending script
         env:
@@ -614,7 +616,7 @@ jobs:
           RESEND_TO_EMAIL: ${{ secrets.RESEND_TO_EMAIL }}
           TRENDING_LIMIT: 10
           TRENDING_TIMEFRAME: daily
-        run: bun run src/index.ts
+        run: npm start
 
       - name: Display execution log
         if: always()
@@ -653,13 +655,13 @@ jobs:
 
 ```bash
 # 使用 Agent SDK（推荐）
-bun install @anthropic-ai/claude-agent-sdk cheerio resend
+npm install @anthropic-ai/claude-agent-sdk cheerio resend
 
 # 或使用 Client SDK
-bun install @anthropic-ai/sdk cheerio resend
+npm install @anthropic-ai/sdk cheerio resend
 
 # 安装开发依赖（两种方式都需要）
-bun install -D @types/node
+npm install -D @types/node
 ```
 
 ### 第二步：创建类型定义
@@ -931,8 +933,8 @@ async function main() {
         allowedTools: ['WebSearch'],
         mcpServers: {
           trending: {
-            command: 'bun',
-            args: ['run', './src/mcp/trendingServer.ts']
+            command: 'node',
+            args: ['./src/mcp/trendingServer.js']
           }
         }
       }
@@ -1457,7 +1459,7 @@ A: 减少项目数量（TRENDING_LIMIT）；减少每个项目的搜索次数；
 - [Claude Tool Use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)
 - [Claude Web Search Tool](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search-tool)
 - [Resend 文档](https://resend.com/docs)
-- [Bun 文档](https://bun.sh/docs)
+
 - [Cheerio 文档](https://cheerio.js.org/)
 
 ### 示例代码

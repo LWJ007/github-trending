@@ -4,8 +4,8 @@
   "private": true,
   "module": "src/index.ts",
   "scripts": {
-    "start": "bun run src/index.ts",
-    "dev": "bun --hot run src/index.ts",
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -16,11 +16,13 @@
     "@anthropic-ai/claude-agent-sdk": "^0.2.23",
     "@modelcontextprotocol/sdk": "^1.25.3",
     "cheerio": "^1.2.0",
+    "dotenv": "^16.0.0",
     "resend": "^6.9.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.2.0",
-    "@types/bun": "latest",
-    "eslint": "^9.5.0"
+    "@types/node": "^20.0.0",
+    "eslint": "^9.5.0",
+    "tsx": "^4.0.0"
   }
 }

@@ -6,6 +6,7 @@ import { generateEmail } from './email/emailGenerator.js'
 import { sendEmail } from './email/emailSender.js'
 import { extractJSON } from './utils/jsonExtractor.js'
 import { logger } from './utils/logger.js'
+import 'dotenv/config'
 
 function isTruthy(value: string | undefined): boolean {
   if (!value)
@@ -115,8 +116,8 @@ async function processLanguage(language: string | undefined): Promise<void> {
         includePartialMessages: logLlmStream,
         mcpServers: {
           trending: {
-            command: 'bun',
-            args: ['run', './src/mcp/trendingMcpServer.ts'],
+            command: 'tsx',
+            args: ['./src/mcp/trendingMcpServer.ts'],
           },
         },
         tools: {

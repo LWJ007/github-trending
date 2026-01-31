@@ -1,0 +1,48 @@
+---
+description: Use Node.js and npm for package management and execution.
+globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
+alwaysApply: false
+---
+
+Default to using Node.js and npm.
+
+- Use `node <file>` or `npm run <script>` to run TypeScript files
+- Use `npm test` to run tests (requires test framework setup)
+- Use `npm install` to install dependencies
+- Use `npm run <script>` to run package.json scripts
+- Use `npx <package> <command>` to execute packages
+- Use `dotenv` to load .env files
+
+## Node.js APIs
+
+- Use `fs/promises` for file operations
+- Use `child_process` or `execa` to execute commands
+- Use `express` or `http/https` for HTTP servers
+- Use `sqlite3` or `better-sqlite3` for SQLite
+- Use `ioredis` for Redis
+- Use `pg` or `postgres.js` for PostgreSQL
+
+## Testing
+
+Use `npm test` to run tests. Configure a test framework like Jest or Vitest first.
+
+```ts#index.test.ts
+import { describe, it, expect } from 'vitest'
+
+describe('hello world', () => {
+  it('should return 1', () => {
+    expect(1).toBe(1)
+  })
+})
+```
+
+## Frontend
+
+For frontend development, consider using:
+- Vite for build tooling and dev server
+- Webpack for complex bundling scenarios
+- React/Vue/Angular frameworks
+
+Use `npm run dev` for development with hot reload.
+
+For more information, read the Node.js documentation at https://nodejs.org/docs
